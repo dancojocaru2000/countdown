@@ -136,6 +136,32 @@ namespace WindowsFormsApplication2
             }
         }
 
+        private void button1_HelpRequested(object sender, HelpEventArgs hlpevent)
+        {
+            MessageBox.Show("Click this button to either start the countdown or stop it totally.\nBy stopping, the countdown will reset to 0. To pause the countdown temporally, press the pause button!", "Start/Stop button - help", MessageBoxButtons.OK, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+        }
+
+        /*bool exit = false;
+
+        private void Countdown_Move(object sender, EventArgs e)
+        {
+            if (exit)
+            {
+                MessageBox.Show("Please do not move or resize the window!");
+                Application.Exit();
+            }
+        }
+
+        private void move_timer_Tick(object sender, EventArgs e)
+        {
+            exit = true;
+        }*/
+        
+        private void pause_HelpRequested(object sender, HelpEventArgs hlpevent)
+        {
+            MessageBox.Show("Click this button to either pause the countdown or resume it.\nBy pausing, the countdown will stay in the same position until resumed. To stop the countdown permanently, press the stop button!", "Start/Stop button - help", MessageBoxButtons.OK, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (taskbar > 50) taskbar = 0;
@@ -155,7 +181,7 @@ namespace WindowsFormsApplication2
             }
             taskbar++;
             TaskbarProgress.SetValue(this.Handle, progressBar.Value, progressBar.Maximum);
-
+            
 
             miliseconds--;
             progressBar.Value = miliseconds;
