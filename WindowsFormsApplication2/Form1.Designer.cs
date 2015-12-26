@@ -43,6 +43,7 @@
             this.elapsed = new System.Windows.Forms.Label();
             this.elapsed_progress = new System.Windows.Forms.ProgressBar();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.pause = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -58,11 +59,11 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(188, 12);
+            this.button1.Location = new System.Drawing.Point(166, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 23);
+            this.button1.Size = new System.Drawing.Size(142, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Start countdown";
+            this.button1.Text = "Start the countdown";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -121,7 +122,6 @@
             this.minutes_input.Size = new System.Drawing.Size(63, 22);
             this.minutes_input.TabIndex = 2;
             this.minutes_input.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.minutes_input.TextChanged += new System.EventHandler(this.minutes_input_TextChanged);
             // 
             // label2
             // 
@@ -137,12 +137,11 @@
             // 
             this.time_label.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.time_label.BackColor = System.Drawing.Color.Transparent;
-            this.time_label.Location = new System.Drawing.Point(13, 129);
+            this.time_label.Location = new System.Drawing.Point(12, 129);
             this.time_label.Name = "time_label";
             this.time_label.Size = new System.Drawing.Size(134, 13);
             this.time_label.TabIndex = 0;
             this.time_label.Visible = false;
-            this.time_label.Click += new System.EventHandler(this.time_label_Click);
             // 
             // progressBar
             // 
@@ -175,12 +174,24 @@
             this.timer2.Interval = 5000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
+            // pause
+            // 
+            this.pause.Location = new System.Drawing.Point(12, 175);
+            this.pause.Name = "pause";
+            this.pause.Size = new System.Drawing.Size(296, 23);
+            this.pause.TabIndex = 8;
+            this.pause.Text = "Pause the countdown";
+            this.pause.UseVisualStyleBackColor = true;
+            this.pause.Visible = false;
+            this.pause.Click += new System.EventHandler(this.pause_Click);
+            // 
             // Countdown
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(320, 176);
+            this.ClientSize = new System.Drawing.Size(320, 206);
             this.Controls.Add(this.elapsed_progress);
+            this.Controls.Add(this.pause);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.minutes_input);
@@ -221,6 +232,7 @@
         private System.Windows.Forms.Label elapsed;
         private System.Windows.Forms.ProgressBar elapsed_progress;
         private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Button pause;
     }
 }
 

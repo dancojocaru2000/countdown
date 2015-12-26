@@ -20,41 +20,65 @@ namespace WindowsFormsApplication2
 
         int miliseconds, taskbar;
 
+        bool start_clicked = false;
+
         private void button1_Click(object sender, EventArgs e)
         {
-            //Composing the time in h,m,s
-            if (hours_input.Text == "") hours_input.Text = "00";
-            if (minutes_input.Text == "") minutes_input.Text = "00";
-            if (seconds_input.Text == "") seconds_input.Text = "00";
-            for (int i = 0; i <= 9; i++)
+            if (! start_clicked)
             {
-                if (Convert.ToInt32(hours_input.Text) == i) hours_input.Text = "0" + i;
-                if (Convert.ToInt32(minutes_input.Text) == i) minutes_input.Text = "0" + i;
-                if (Convert.ToInt32(seconds_input.Text) == i) seconds_input.Text = "0" + i;
+                //Composing the time in h,m,s
+                if (hours_input.Text == "") hours_input.Text = "00";
+                if (minutes_input.Text == "") minutes_input.Text = "00";
+                if (seconds_input.Text == "") seconds_input.Text = "00";
+                for (int i = 0; i <= 9; i++)
+                {
+                    if (Convert.ToInt32(hours_input.Text) == i) hours_input.Text = "0" + i;
+                    if (Convert.ToInt32(minutes_input.Text) == i) minutes_input.Text = "0" + i;
+                    if (Convert.ToInt32(seconds_input.Text) == i) seconds_input.Text = "0" + i;
+                }
+                int hours, minutes, seconds;
+                hours = Convert.ToInt32(hours_input.Text);
+                minutes = Convert.ToInt32(minutes_input.Text);
+                seconds = Convert.ToInt32(seconds_input.Text);
+
+                //Composing the time in miliseconds
+                miliseconds = (hours * 3600 + minutes * 60 + seconds) * 4 + 1;
+
+                progressBar.Maximum = miliseconds - 1;
+                progressBar.Value = miliseconds - 1;
+                elapsed_progress.Maximum = progressBar.Maximum;
+
+                //Starting countdown
+                timer1.Enabled = true;
+                progressBar.Visible = true;
+                time_label.Visible = true;
+                elapsed_progress.Visible = true;
+                elapsed.Visible = true;
+                taskbar = 0;
+                seconds_input.ReadOnly = true;
+                minutes_input.ReadOnly = true;
+                hours_input.ReadOnly = true;
+                pause.Visible = true;
+
+                //Setting the stop button
+                start_clicked = true;
+                button1.Text = "Stop the countdown";
             }
-            int hours, minutes, seconds;
-            hours = Convert.ToInt32(hours_input.Text);
-            minutes = Convert.ToInt32(minutes_input.Text);
-            seconds = Convert.ToInt32(seconds_input.Text);
-
-            //Composing the time in miliseconds
-            miliseconds = (hours * 3600 + minutes * 60 + seconds) * 4 + 1;
-
-            progressBar.Maximum = miliseconds - 1;
-            progressBar.Value = miliseconds - 1;
-            elapsed_progress.Maximum = progressBar.Maximum;
-
-            //Starting countdown
-            timer1.Enabled = true;
-            progressBar.Visible = true;
-            time_label.Visible = true;
-            elapsed_progress.Visible = true;
-            elapsed.Visible = true;
-            taskbar = 0;
-            seconds_input.ReadOnly = true;
-            minutes_input.ReadOnly = true;
-            hours_input.ReadOnly = true;
-            button1.Enabled = false;
+            else
+            {
+                start_clicked = false;
+                button1.Text = "Start the countdown";
+                button1.Enabled = false;
+                timer2.Enabled = true;
+                timer1.Enabled = false;
+                this.Text = "Countdown stopped!";
+                time_label.Text = "Countdown stopped!";
+                pause.Visible = false;
+                ModifyProgressBarColor.SetState(elapsed_progress, 2);
+                ModifyProgressBarColor.SetState(progressBar, 2);
+                
+                TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.Error);
+            }
         }
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -69,8 +93,12 @@ namespace WindowsFormsApplication2
             seconds_input.ReadOnly = false;
             minutes_input.ReadOnly = false;
             hours_input.ReadOnly = false;
-            button1.Enabled = true;
             progressBar.Visible = false;
+            button1.Enabled = true;
+            button1.Text = "Start the countdown";
+            start_clicked = false;
+            pause_clicked = 0;
+            pause.Text = "Pause the countdown";
 
             hours_input.Text = "";
             minutes_input.Text = "";
@@ -84,14 +112,28 @@ namespace WindowsFormsApplication2
             timer2.Enabled = false;
         }
 
-        private void minutes_input_TextChanged(object sender, EventArgs e)
+        int pause_clicked = 0;
+
+        private void pause_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void time_label_Click(object sender, EventArgs e)
-        {
-
+            if (pause_clicked == 0)
+            {
+                pause_clicked = 1;
+                pause.Text = "Resume the countdown";
+                timer1.Enabled = false;
+                ModifyProgressBarColor.SetState(elapsed_progress, 3);
+                ModifyProgressBarColor.SetState(progressBar, 3);
+                TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.Paused);
+            }
+            else
+            {
+                pause_clicked = 0;
+                pause.Text = "Pause the countdown";
+                ModifyProgressBarColor.SetState(elapsed_progress, 1);
+                ModifyProgressBarColor.SetState(progressBar, 1);
+                timer1.Enabled = true;
+                TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.Normal);
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -126,6 +168,7 @@ namespace WindowsFormsApplication2
                 timer1.Enabled = false;
                 time_label.Text = "Countdown expired!";
                 timer2.Enabled = true;
+                pause.Visible = false;
                 this.Text = "Countdown expired!";
                 ModifyProgressBarColor.SetState(elapsed_progress, 2);
                 ModifyProgressBarColor.SetState(progressBar, 2);
